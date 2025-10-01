@@ -23,7 +23,7 @@
         // --- FILTRO DE SENTIMENTO (MUDANÇA PRINCIPAL) ---
         const SENTIMENT_TO_FILTER = "Negativo";
 
-        const stopWords = new Set(['a', 'o', 'e', 'é', 'de', 'do', 'da', 'dos', 'das', 'em', 'um', 'uma', 'para', 'com', 'não', 'que', 'se', 'por', 'mais', 'como', 'mas', 'foi', 'ao', 'ele', 'ela', 'tem', 'à', 'seu', 'sua', 'ou', 'ser', 'quando', 'muito', 'há', 'nos', 'já', 'está', 'eu', 'também', 'só', 'pelo', 'pela', 'até', 'isso', 'entre', 'depois', 'sem', 'mesmo', 'aos', 'ter', 'seus', 'quem', 'nas', 'me', 'esse', 'eles', 'estão', 'você', 'tinha', 'foram', 'essa', 'num', 'numa', 'suas', 'às', 'era', 'eram', 'fomos', 'este', 'aquele', 'aquela', 'isto', 'aquilo', 'estou', 'estamos', 'esteja', 'estejamos', 'esteve', 'estive', 'estiver', 'estivéssemos', 'fosse', 'fôssemos', 'formos', 'serei', 'será', 'seremos', 'seria', 'seríamos', 'tenho', 'temos', 'tinha', 'tínhamos', 'tive', 'tivemos', 'tiver', 'tivéramos', 'tivéssemos', 'terei', 'terá', 'teremos', 'teria', 'teríamos', 'meu', 'minha', 'meus', 'minhas', 'teu', 'tua', 'teus', 'tuas', 'nosso', 'nossa', 'nossos', 'nossas', 'lhe', 'lhes', 'dela', 'delas', 'dele', 'deles', 'pra', 'pro', 'pras', 'pros', 'q', 'vc', 'tbm', 'pq', 'msm']);
+        const stopWords = new Set(['a', 'o', 'e', 'é', 'de', 'do', 'da', 'dos', 'das', 'em', 'um', 'uma', 'para', 'com', 'não', 'que', 'se', 'por', 'mais', 'como', 'mas', 'foi', 'ao', 'ele', 'ela', 'tem', 'à', 'seu', 'sua', 'ou', 'ser', 'quando', 'muito', 'há', 'nos', 'já', 'está', 'eu', 'também', 'só', 'pelo', 'pela', 'até', 'isso', 'entre', 'depois', 'sem', 'mesmo', 'aos', 'ter', 'seus', 'quem', 'nas', 'me', 'esse', 'eles', 'estão', 'você', 'tinha', 'foram', 'essa', 'num', 'numa', 'suas', 'às', 'era', 'eram', 'fomos', 'este', 'aquele', 'aquela', 'isto', 'aquilo', 'estou', 'estamos', 'esteja', 'estejamos', 'esteve', 'estive', 'estiver', 'estivéssemos', 'fosse', 'fôssemos', 'formos', 'serei', 'será', 'seremos', 'seria', 'seríamos', 'tenho', 'temos', 'tinha', 'tínhamos', 'tive', 'tivemos', 'tiver', 'tivéramos', 'tivéssemos', 'terei', 'terá', 'teremos', 'teria', 'teríamos', 'meu', 'minha', 'meus', 'minhas', 'teu', 'tua', 'teus', 'tuas', 'nosso', 'nossa', 'nossos', 'nossas', 'lhe', 'lhes', 'dela', 'delas', 'dele', 'deles', 'pra', 'pro', 'pras', 'pros', 'q', 'vc', 'tbm', 'pq', 'msm','natura']);
 
         async function generateWordCloud() {
             try {
@@ -86,4 +86,5 @@
         generateWordCloud();
     </script>
 </body>
+
 </html>
