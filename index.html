@@ -1,0 +1,89 @@
+<!DOCTYPE html>
+<html lang="pt-br">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Nuvem de Palavras - Negativos (Avançado)</title>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/wordcloud2.js/1.1.0/wordcloud2.min.js"></script>
+    <style>
+        html, body { width: 100%; height: 100%; margin: 0; padding: 0; display: flex; justify-content: center; align-items: center; font-family: sans-serif; background-color: transparent; }
+        #wordcloud-canvas { width: 100% !important; height: 100% !important; }
+    </style>
+</head>
+<body>
+    <canvas id="wordcloud-canvas"></canvas>
+
+    <script>
+        // --- CONFIGURAÇÕES ---
+        const sheetUrl = 'https://docs.google.com/spreadsheets/d/e/2PACX-1vTvenQ5DOJDScxMKbEg0D1l5ErmMkjzdTR8Hc0BvdelQZcqG49wM6HhiKM-B1cEuOmErh1BDkTL4ieK/pub?output=tsv'; // <<< COLE A MESMA URL .TSV QUE VOCÊ USOU ANTES
+
+        const COMMENT_COLUMN_INDEX = 4;
+        const SENTIMENT_COLUMN_INDEX = 5;
+        
+        // --- FILTRO DE SENTIMENTO (MUDANÇA PRINCIPAL) ---
+        const SENTIMENT_TO_FILTER = "Negativo";
+
+        const stopWords = new Set(['a', 'o', 'e', 'é', 'de', 'do', 'da', 'dos', 'das', 'em', 'um', 'uma', 'para', 'com', 'não', 'que', 'se', 'por', 'mais', 'como', 'mas', 'foi', 'ao', 'ele', 'ela', 'tem', 'à', 'seu', 'sua', 'ou', 'ser', 'quando', 'muito', 'há', 'nos', 'já', 'está', 'eu', 'também', 'só', 'pelo', 'pela', 'até', 'isso', 'entre', 'depois', 'sem', 'mesmo', 'aos', 'ter', 'seus', 'quem', 'nas', 'me', 'esse', 'eles', 'estão', 'você', 'tinha', 'foram', 'essa', 'num', 'numa', 'suas', 'às', 'era', 'eram', 'fomos', 'este', 'aquele', 'aquela', 'isto', 'aquilo', 'estou', 'estamos', 'esteja', 'estejamos', 'esteve', 'estive', 'estiver', 'estivéssemos', 'fosse', 'fôssemos', 'formos', 'serei', 'será', 'seremos', 'seria', 'seríamos', 'tenho', 'temos', 'tinha', 'tínhamos', 'tive', 'tivemos', 'tiver', 'tivéramos', 'tivéssemos', 'terei', 'terá', 'teremos', 'teria', 'teríamos', 'meu', 'minha', 'meus', 'minhas', 'teu', 'tua', 'teus', 'tuas', 'nosso', 'nossa', 'nossos', 'nossas', 'lhe', 'lhes', 'dela', 'delas', 'dele', 'deles', 'pra', 'pro', 'pras', 'pros', 'q', 'vc', 'tbm', 'pq', 'msm']);
+
+        async function generateWordCloud() {
+            try {
+                const response = await fetch(sheetUrl);
+                const tsvData = await response.text();
+
+                const rows = tsvData.split('\n');
+                const wordCounts = {};
+                for (let i = 1; i < rows.length; i++) {
+                    const row = rows[i];
+                    const columns = row.split('\t');
+                    if (columns.length > COMMENT_COLUMN_INDEX && columns.length > SENTIMENT_COLUMN_INDEX) {
+                        const sentiment = columns[SENTIMENT_COLUMN_INDEX].trim().replace(/"/g, '');
+                        if (sentiment.toLowerCase() === SENTIMENT_TO_FILTER.toLowerCase()) {
+                            let text = columns[COMMENT_COLUMN_INDEX];
+                            if (text) {
+                                text = text.toLowerCase().replace(/[`"']/g, '').replace(/[.,\/#!$%\^&\*;:{}=\-_`~()]/g, " ").replace(/\d+/g, '').replace(/(\r\n|\n|\r)/gm, " ").replace(/\p{Emoji}/gu, '');
+                                const words = text.split(/\s+/);
+                                words.forEach(word => {
+                                    if (word && word.length > 2 && !stopWords.has(word)) {
+                                        wordCounts[word] = (wordCounts[word] || 0) + 1;
+                                    }
+                                });
+                            }
+                        }
+                    }
+                }
+                const list = Object.entries(wordCounts).map(([text, weight]) => [text, weight]);
+                if (list.length === 0) {
+                    document.body.innerHTML = `Nenhuma palavra encontrada para o filtro "${SENTIMENT_TO_FILTER}".`;
+                    return;
+                }
+                
+                const options = {
+                    list: list,
+                    gridSize: 2,
+                    weightFactor: 3,
+                    fontFamily: 'Arial, sans-serif',
+                    
+                    // --- MUDANÇA NA COR PARA TONS DE VERMELHO ---
+                    color: function (word, weight) {
+                        var lightness = Math.floor(Math.random() * 40) + 25;
+                        // Matiz 0 (vermelho), Saturação ~80%, Luminosidade aleatória
+                        return 'hsl(0, 80%, ' + lightness + '%)';
+                    },
+
+                    backgroundColor: 'transparent',
+                    rotateRatio: 0,
+                    minSize: 2
+                };
+
+                WordCloud(document.getElementById('wordcloud-canvas'), options);
+
+            } catch (error) {
+                console.error('Erro ao gerar a nuvem de palavras:', error);
+                document.body.innerHTML = 'Ocorreu um erro ao carregar os dados.';
+            }
+        }
+
+        generateWordCloud();
+    </script>
+</body>
+</html>
